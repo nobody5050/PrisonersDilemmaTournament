@@ -3,9 +3,9 @@ import random
 def strategy(history, memory):
 	gameLength = history.shape[1]
 	if gameLength < 50:
-		return "defect", None
+		choice = "cooperate"
+		if history.shape[1] >= 2 and history[1,-1] == 0 and history[1,-2] == 0:
+			choice = "defect"
+			return choice, None
 	else:
-		if random.randint(0,1) == 0:
-			return "cooperate", None
-		else:
-			return "defect", None
+		return "defect", None
