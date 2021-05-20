@@ -2,7 +2,7 @@ import random
 import numpy
 
 '''
- Play 10 rounds with a random patern and monitor what
+ Play 10 rounds with a set patern and monitor what
  happens, try to dicern from this which strategy they
  are using and then use the best strategy against them
  
@@ -20,8 +20,9 @@ import numpy
 '''
 
 def strategy(history, memory):
+	return "cooperate", None
 	gameLength = history.shape[1]
-	if gameLength == 3:
+	if gameLength == 3 and Trust != False:
 		# Since the detective does cooperate defect cooperate cooperate, we can detect this at round 3
 		if history[1, -3] == 1 and history[1, -2] == 0 and history[1, -1] == 1:
 			# this means the oponent is playing detective.
@@ -29,6 +30,14 @@ def strategy(history, memory):
 			return "defect", detective # this will work against round 4 detective, but will set them to tit for tat
 		else:
 			return "cooperate", None
+			# they arent a detective
 	else: 
-		return "cooperate", None
-			
+		# return "cooperate", None
+		if gameLength == 1:
+			if history[1, -1] == 0:
+				# they defected in the first turn. never trust them
+				Trust = False
+				return "defect", trust
+		else:
+			return "cooperate"
+			# neither detective nor defect on first turn
