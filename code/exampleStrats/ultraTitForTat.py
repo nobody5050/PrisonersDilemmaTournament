@@ -1,4 +1,5 @@
 import random
+import numpy
 
 '''
  Play 10 rounds with a random patern and monitor what
@@ -20,10 +21,14 @@ import random
 
 def strategy(history, memory):
 	gameLength = history.shape[1]
-	if gameLength < 10:
-		# print("hi")
+	if gameLength == 3:
+		# Since the detective does cooperate defect cooperate cooperate, we can detect this at round 3
+		if history[1, -3] == 1 and history[1, -2] == 0 and history[1, -1] == 1:
+			# this means the oponent is playing detective.
+			detective = True
+			return "defect", detective # this will work against round 4 detective, but will set them to tit for tat
+		else:
+			return "cooperate", None
+	else: 
 		return "cooperate", None
-	else:
-		return "defect", None
-		# TODO implement logic in comment above
-	
+			
