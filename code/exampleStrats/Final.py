@@ -1,0 +1,3 @@
+
+def npwtt(history, memory):
+	
