@@ -3,6 +3,12 @@ import random
 
 import numpy as np
 
+num_rounds = history.shape[1]
+testing_schedule = [1, 0, 0, 1, 1]
+max_defection_threshold = Decimal(1) / Decimal(2)  # do not forgive high defections
+small_defection_window = 20
+max_local_unprovoked_defections = 5  # too many unprovoked defections? random
+joss_unprovoked_defections = 2 # in a window of 20, this is equal to 10%. 10% defections is what you should expect from joss
 
  # Detective, except:
  # - use nprtt instead of tit-for-tat for the forgiveness heuristic
@@ -16,11 +22,6 @@ def strategy(history, memory):
      :memory: mode string, which may be None, 'tit-for-tat', 'alternate', 'defect', or
          'defect_assuming_cooperative'
      """
-     num_rounds = history.shape[1]
-     testing_schedule = [1, 0, 0, 1, 1]
-     max_defection_threshold = Decimal(1) / Decimal(2)  # do not forgive high defections
-     small_defection_window = 15
-     max_local_unprovoked_defections = 4  # too many unprovoked defections? random
 
      if num_rounds < len(testing_schedule):  # intitial testing phase
          choice = testing_schedule[num_rounds]
