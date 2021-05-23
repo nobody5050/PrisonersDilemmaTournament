@@ -84,26 +84,37 @@ def strategy(history, memory):
                  memory = "defect"
 
              else:
-                 opponents_last_move = history[1, -1] if num_rounds >= 1 else 1
-                 our_second_last_move = history[0, -2] if num_rounds >= 2 else 1
-                 opponent_history = history[1, 0:num_rounds]
-                 opponent_stats = dict(
-                     zip(*np.unique(opponent_history, return_counts=True))
-                 )
-                 opponent_defection_rate = Decimal(
-                     int(opponent_stats.get(0, 0))
-                 ) / Decimal(num_rounds)
-
-                 be_patient = opponent_defection_rate <= max_defection_threshold
-
-                 choice = (
-                     1
-                     if (
-                         opponents_last_move == 1
-                         or (be_patient and our_second_last_move == 0)
-                     )
-                     else 0
-                 )
-                 memory = "tit-for-tat"
+             	WINDOW_SIZE = 5
+             	FREE_PASS = 0  # we forgive if they defect during the first FREE_PASS turns
+             	
+             	num_rounds = history.shape[1]
+             	
+             	opponents_last_move = history[1, -1] if num_rounds >= 1 else 1
+             	our_second_last_move = history[0, -2] if num_rounds >= 2 else 1
+             	
+             	choice = 1
+             	if opponents_last_move == 0:
+             		window_start = max(num_rounds - WINDOW_SIZE, 0)
+             		window_end = num_rounds
+             		opponent_recent_moves = history[1, window_start:window_end]
+             		opponent_recent_stats = dict(
+             			zip(*numpy.unique(opponent_recent_moves, return_counts=True))
+             			)
+             			consider_forgiving = False
+             			if num_rounds <= FREE_PASS:
+             				consider_forgiving = True
+             			elif opponent_recent_stats.get(1, 0) > 0:
+             				consider_forgiving = True
+             				
+             				# only forgive defections if they've cooperated with us in the past 5 rds
+             				choice = (
+             					1
+             					if (
+             						opponents_last_move == 1
+             						or (consider_forgiving and our_second_last_move == 0)
+             						)
+             						else 0
+             						)
+             						memory = "tit-for-tat"
 
      return choice, memory
