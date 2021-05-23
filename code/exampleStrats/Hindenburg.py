@@ -66,11 +66,11 @@ def strategy(history, memory):
              memory = "tit-for-tat"
      else:  # num_rounds > len(testing_schedule)
          if memory == "defect":
-         	defect()
+         	defect(history, memory)
          elif memory == "alwaysDefect":
-         	alwaysDefect()
+         	alwaysDefect(history, memory)
          elif memory == "alternate":
-             alternate()
+             alternate(history, memory)
          else:  # nprtt or None
              # first check whether we've detected a random
              window_start = max(0, num_rounds - small_defection_window)
