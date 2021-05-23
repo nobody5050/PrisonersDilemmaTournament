@@ -100,21 +100,21 @@ def strategy(history, memory):
              		opponent_recent_stats = dict(
              			zip(*numpy.unique(opponent_recent_moves, return_counts=True))
              			)
-             			consider_forgiving = False
-             			if num_rounds <= FREE_PASS:
-             				consider_forgiving = True
-             			elif opponent_recent_stats.get(1, 0) > 0:
-             				consider_forgiving = True
-             				
-             				# only forgive defections if they've cooperated with us in the past 5 rds
-             				choice = (
-             					1
-             					if (
-             						opponents_last_move == 1
-             						or (consider_forgiving and our_second_last_move == 0)
-             						)
-             						else 0
-             						)
-             						memory = "tit-for-tat"
+             	consider_forgiving = False
+             	if num_rounds <= FREE_PASS:
+             		consider_forgiving = True
+             	elif opponent_recent_stats.get(1, 0) > 0:
+             		consider_forgiving = True
+             	 	
+             	 	# only forgive defections if they've cooperated with us in the past 5 rds
+             choice = (
+             	 		1
+             	 		if (
+             	 			opponents_last_move == 1
+             	 			or (consider_forgiving and our_second_last_move == 0)
+             	 			)
+             	 		else 0
+             	 		)
+             memory = "tit-for-tat"
 
      return choice, memory
