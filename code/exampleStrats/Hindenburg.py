@@ -16,6 +16,30 @@ joss_unprovoked_defections = 2 # in a window of 20, this is equal to 10%. 10% de
  # - detect ftft and spam DCDCDCDCDC to take advantage of it
  # - detect alwaysCooperate and spam DDDDD to take advantage of it, at the cost of the
  #   grimTrigger
+
+def alternate(history, memory):
+	our_last_move = history[0, -1] if num_rounds > 0 else 1
+	choice = 0 if our_last_move else 1
+	memory = "alternate"
+
+def defect(history, memory):
+	# break out of defection if they cooperated twice in a row
+	last_two_opponent_moves = history[1, -2:]
+	if np.count_nonzero(last_two_opponent_moves) == 0:
+		choice = 1
+		memory = "tit-for-tat"
+	else:
+		choice = 0
+		memory = "defect"
+
+def alwaysDefect(history, memory):
+	if history[1, -1] == 0:  # uh oh, we predicted wrong!
+	  choice = 0
+	  memory = "tit-for-tat"
+	else:
+		choice = 0
+		memory = "alwaysDefect"
+	
 def strategy(history, memory):
      """
      :history: 2d numpy array of our and opponent past moves
@@ -30,7 +54,7 @@ def strategy(history, memory):
          opponent_stats = dict(zip(*np.unique(opponent_moves, return_counts=True)))
          if opponent_stats.get(0, 0) < 1:  # they never defected, take advantage of them
              choice = 0
-             memory = "defect_assuming_cooperative"
+             memory = "alwaysDefect"
          elif opponent_stats.get(0, 0) == len(testing_schedule):  # they always defect
              choice = 0
              memory = "defect"
@@ -42,25 +66,11 @@ def strategy(history, memory):
              memory = "tit-for-tat"
      else:  # num_rounds > len(testing_schedule)
          if memory == "defect":
-             # break out of defection if they cooperated twice in a row
-             last_two_opponent_moves = history[1, -2:]
-             if np.count_nonzero(last_two_opponent_moves) == 0:
-                 choice = 1
-                 memory = "tit-for-tat"
-             else:
-                 choice = 0
-                 memory = "defect"
-         elif memory == "defect_assuming_cooperative":
-             if history[1, -1] == 0:  # uh oh, we predicted wrong!
-                 choice = 0
-                 memory = "tit-for-tat"
-             else:
-                 choice = 0
-                 memory = "defect_assuming_cooperative"
+         	defect()
+         elif memory == "alwaysDefect":
+         	alwaysDefect()
          elif memory == "alternate":
-             our_last_move = history[0, -1] if num_rounds > 0 else 1
-             choice = 0 if our_last_move else 1
-             memory = "alternate"
+             alternate()
          else:  # nprtt or None
              # first check whether we've detected a random
              window_start = max(0, num_rounds - small_defection_window)
