@@ -3,7 +3,6 @@ import random
 
 import numpy as np
 
-num_rounds = history.shape[1]
 testing_schedule = [1, 0, 0, 1, 1]
 max_defection_threshold = Decimal(1) / Decimal(2)  # do not forgive high defections
 small_defection_window = 20
@@ -46,7 +45,9 @@ def strategy(history, memory):
      :memory: mode string, which may be None, 'tit-for-tat', 'alternate', 'defect', or
          'defect_assuming_cooperative'
      """
-
+	
+     num_rounds = history.shape[1]
+	
      if num_rounds < len(testing_schedule):  # intitial testing phase
          choice = testing_schedule[num_rounds]
      elif num_rounds == len(testing_schedule):  # time to transition to our modes
