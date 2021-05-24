@@ -21,6 +21,7 @@ def alternate(history, memory):
 	our_last_move = history[0, -1] if num_rounds > 0 else 1
 	choice = 0 if our_last_move else 1
 	memory = "alternate"
+	return choice, memory
 
 def defect(history, memory):
 	# break out of defection if they cooperated twice in a row
@@ -31,6 +32,7 @@ def defect(history, memory):
 	else:
 		choice = 0
 		memory = "defect"
+	return choice, memory
 
 def alwaysDefect(history, memory):
 	if history[1, -1] == 0:  # uh oh, we predicted wrong!
@@ -39,6 +41,7 @@ def alwaysDefect(history, memory):
 	else:
 		choice = 0
 		memory = "alwaysDefect"
+	return choice, memory
 	
 def strategy(history, memory):
      """
@@ -69,6 +72,8 @@ def strategy(history, memory):
      else:  # num_rounds > len(testing_schedule)
          if memory == "defect":
          	defect(history, memory)
+         	history = defect[0]
+         	memory = defect[1]
          elif memory == "alwaysDefect":
          	alwaysDefect(history, memory)
          elif memory == "alternate":
