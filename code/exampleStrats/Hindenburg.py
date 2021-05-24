@@ -3,6 +3,7 @@ import random
 
 import numpy as np
 
+choice = 1
 testing_schedule = [1, 0, 0, 1, 1]
 max_defection_threshold = Decimal(1) / Decimal(2)  # do not forgive high defections
 small_defection_window = 20
