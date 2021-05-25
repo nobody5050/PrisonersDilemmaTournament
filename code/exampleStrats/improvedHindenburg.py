@@ -10,11 +10,10 @@ def strategy(history, memory):
 	# and if it cant, it becomes a tit-for-tat
 	
 	num_rounds = history.shape[1] # number of rounds completed
-	testing_schedule = [1, 0, 0, 1, 1] # list of moves to perform while testing
 	max_defection_threshold = Decimal(1) / Decimal(2)  # do not forgive high defections
 	
 	if memory == None:
-		if num_rounds == len(testing_schedule):
+		if num_rounds == 5 or memory == "undecided":
 			# Time to choose something.
 			opponent_moves = history[1]
 			opponent_stats = dict(zip(*np.unique(opponent_moves, return_counts=True)))
@@ -22,7 +21,7 @@ def strategy(history, memory):
 				# they never defected, take advantage of them
 				choice = "defect"
 				memory = "alwaysDefect"
-			elif opponent_stats.get(0, 0) == len(testing_schedule):  
+			elif opponent_stats.get(0, 0) == 5:  
 				# they always defect
 				choice = "defect"
 				memory = "alwaysDefect"
@@ -33,12 +32,12 @@ def strategy(history, memory):
 			else:
 				choice = "cooperate"
 				memory = "tft"
-		if num_rounds <= len(testing_schedule):
+		elif num_rounds >= 5:
 			# The game has gone on for longer than the testing schedule and we dont have a choice yet, choose tft
 			memory = "tft"
 		else:
 			# We havent picked something yet. We are in testing.
-			choice = testing_schedule[num_rounds]
+			choice = "tft"
 	else:
 		# We have a chosen state.
 		if memory == "tft":
@@ -52,9 +51,14 @@ def strategy(history, memory):
 			our_last_move = history[0, -1] if num_rounds > 0 else 1
 			choice = 0 if our_last_move else 1
 		elif memory == "alwaysDefect":
+			if history[1, -1] == "0":
+				choice = "cooperate"
+				memory = "undecided"
 			#always defect
 			choice = "defect"
 		else:
+			print("choice: " + choice)
+			print("memory: " + memory)
 			choice = "cooperate"
 			
 	return choice, memory
