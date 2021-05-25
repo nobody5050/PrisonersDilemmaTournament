@@ -37,7 +37,8 @@ def strategy(history, memory):
 			memory = "tft"
 		else:
 			# We havent picked something yet. We are in testing.
-			choice = "tft"
+			choice = "cooperate"
+			memory = "tft"
 	else:
 		# We have a chosen state.
 		if memory == "tft":
