@@ -20,14 +20,18 @@ def strategy(history, memory):
 			opponent_stats = dict(zip(*np.unique(opponent_moves, return_counts=True)))
 			if opponent_stats.get(0, 0) < 1:  
 				# they never defected, take advantage of them
-			  memory = "alwaysDefect"
+				choice = "defect"
+				memory = "alwaysDefect"
 			elif opponent_stats.get(0, 0) == len(testing_schedule):  
 				# they always defect
-			  memory = "alwaysDefect"
+				choice = "defect"
+				memory = "alwaysDefect"
 			elif opponent_moves[2] == 1 and opponent_moves[3] == 0:  
 				# ftft detected
-			  memory = "alternate"
+				choice = "cooperate"
+				memory = "alternate"
 			else:
+				choice = "cooperate"
 				memory = "tft"
 		if num_rounds <= len(testing_schedule):
 			# The game has gone on for longer than the testing schedule and we dont have a choice yet, choose tft
