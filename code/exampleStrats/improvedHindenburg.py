@@ -56,15 +56,15 @@ def strategy(history, memory):
 				# Random Detected
 				choice = "defect"
 				memory = "alwaysDefect"
-			elif opponent_moves[2] == 1 and opponent_moves[3] == 1:
+			elif history[1, -1] == 1 and history[1, -2] == 1:
 				# they never defected, take advantage of them
 				choice = "defect"
 				memory = "defect_assuming_cooperative"
-			elif opponent_moves[2] == 0 and opponent_moves[3] == 0:
+			elif history[1, -1] == 0 and history[1, -2] == 0:
 				# they always defect
 				choice = "defect"
 				memory = "alwaysDefect"
-			elif opponent_moves[2] == 1 and opponent_moves[3] == 0:  
+			elif history[1, -1] == 1 and history[1, -2] == 0:  
 				# ftft detected
 				choice = "cooperate"
 				memory = "alternate"
@@ -101,8 +101,6 @@ def strategy(history, memory):
 			else:
 				choice = "defect"
 		else:
-			print("choice: " + choice)
-			print("memory: " + memory)
-			choice = "cooperate"
+			print("unreachable state lol")
 			
 	return choice, memory
