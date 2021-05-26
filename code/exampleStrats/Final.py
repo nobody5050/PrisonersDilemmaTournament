@@ -39,7 +39,7 @@ def strategy(history, memory):
 	num_rounds = history.shape[1] # number of rounds completed
 	max_defection_threshold = Decimal(1) / Decimal(2)  # do not forgive high defections
 	small_defection_window = 20
-	max_local_unprovoked_defections = 5 # too many unprovoked defections? random
+	max_local_unprovoked_defections = 6 # too many unprovoked defections? random
 	window_start = max(0, num_rounds - small_defection_window) # Set start of detection window
 	window_end = num_rounds # end on our current round
 	opponents_recent_moves = history[1, window_start + 1 : window_end] #get opponents recent moves
