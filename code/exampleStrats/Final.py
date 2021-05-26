@@ -8,6 +8,33 @@ def strategy(history, memory):
 	# A finite state machine detective. 
 	# It tries to figure out what the oponent is thinking,
 	# and if it cant, it becomes a tit-for-tat
+	#
+	# TODO list
+	# [X] Finite state machine
+	# [X] Behave like a tft while detecting
+	# [X] Handle randoms
+	# [?] Break out of D/D loops
+	# [ ] Detect fibbonachi (ahh how do you spell that)
+	# [ ] Maybe swap tft for another variant, unsure as of now
+	# [X] Submit
+	#
+	# Also, cary if you're reading this a few things:
+	# 1. I'd love to see another version if this contest 
+	# with a chance of misscomunication, 
+	# as well as some other highly requested features
+	#
+	# 2. Although I doubt i'll win, if I do then I want to explain
+	# more about this strategy. *please* contact me so i can
+	# explain it to you in more details than I can include in this
+	# simple readme.
+	#
+	# 3. Thanks for hosting such an amazing contest!
+	# I met so many cool people though this and the atmosphere
+	# inside the discord, with so many wonderful minds working
+	# together is truly phenominal. I'm not exagerating when I say
+	# that this week has truly changed my life.
+	#
+	# Thank you. 
 	
 	num_rounds = history.shape[1] # number of rounds completed
 	max_defection_threshold = Decimal(1) / Decimal(2)  # do not forgive high defections
@@ -22,7 +49,7 @@ def strategy(history, memory):
 	testing_schedule = [1, 0, 0, 1, 1] # list of moves to perform while testing
 	
 	if memory == None:
-		if num_rounds == len(testing_schedule):
+		if num_rounds >= len(testing_schedule):
 			# Time to choose something.
 			opponent_moves = history[1]
 			if opponents_recent_defections > max_local_unprovoked_defections:
@@ -44,13 +71,10 @@ def strategy(history, memory):
 			else:
 				choice = "cooperate"
 				memory = "tft"
-		if num_rounds >= len(testing_schedule):
-			# The game has gone on for longer than the testing schedule and we dont have a choice yet, choose tft
-			memory = "tft"
 		else:
 			# We havent picked something yet. We are in testing.
 			choice = testing_schedule[num_rounds]
-	else:
+	if memory != None:
 		# We have a chosen state.
 		if memory == "defect-assuming-cooperative":
 			# always defect unless they defect
@@ -74,5 +98,6 @@ def strategy(history, memory):
 			choice = "defect"
 		else:
 			choice = "cooperate"
-			
+	
+	print(memory)		
 	return choice, memory

@@ -49,22 +49,22 @@ def strategy(history, memory):
 	
 	if memory == None:
 		if num_rounds == 5:
-			print("fifth round")
+			#print("fifth round")
 			# Time to choose something.
 			opponent_moves = history[1]
 			opponent_stats = dict(zip(*np.unique(opponent_moves, return_counts=True)))
 			if opponents_recent_defections > max_local_unprovoked_defections:
-				print("Detected random")
+				#print("Detected random")
 				# Random Detected
 				choice = "defect"
 				memory = "alwaysDefect"
 			elif history[1, -1] == 1 and history[1, -2] == 1:
-				print("detected cooperative")
+				#print("detected cooperative")
 				# they never defected, take advantage of them
 				choice = "defect"
 				memory = "defect_assuming_cooperative"
 			elif history[1, -1] == 0 and history[1, -2] == 0:
-				print("detected alwaysDefect")
+				#print("detected alwaysDefect")
 				# they always defect
 				choice = "defect"
 				memory = "alwaysDefect"
@@ -74,15 +74,15 @@ def strategy(history, memory):
 				choice = "cooperate"
 				memory = "alternate"
 			else:
-				print("defaulting to tft, none detected")
+				#print("defaulting to tft, none detected")
 				choice = "cooperate"
 				memory = "tft"
 		elif num_rounds >= 5:
 			# The game has gone on for longer than the testing schedule and we dont have a choice yet, choose tft
-			print("defaulting to tft, greater than 5 rounds")
+			#print("defaulting to tft, greater than 5 rounds")
 			memory = "tft"
 		else:
-			print("defaulting to tft, less than 5 rounds")
+			#print("defaulting to tft, less than 5 rounds")
 			# We havent picked something yet. We are in testing.
 			choice = "cooperate"
 			if history.shape[1] >= 1 and history[1,-1] == 0: 
@@ -97,16 +97,16 @@ def strategy(history, memory):
 				# Choose to defect if and only if the opponent just defected.
 				choice = "defect"
 		elif memory == "alternate":
-			print("alternate")
+			#print("alternate")
 			#alternate
 			our_last_move = history[0, -1] if num_rounds > 0 else 1
 			choice = 0 if our_last_move else 1
 		elif memory == "alwaysDefect":
-			print("alwaysDefect")
+			#print("alwaysDefect")
 			#always defect
 			choice = "defect"
 		elif memory == "defect_assuming_cooperative":
-			print("defect_assuming_cooperative")
+			#print("defect_assuming_cooperative")
 			# always defect unless they defect
 			if opponents_recent_moves[1] == 0:
 				choice = "cooperate"
