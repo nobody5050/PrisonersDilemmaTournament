@@ -64,7 +64,7 @@ def strategy(history, memory):
 				# they always defect
 				choice = "defect"
 				memory = "alwaysDefect"
-			elif opponent_moves[2] == 1 and opponent_moves[3] == 0:  
+			elif opponent_moves[2] == 1 and opponent_moves[3] == 0: 
 				# ftft detected
 				choice = "cooperate"
 				memory = "alternate"
@@ -107,5 +107,4 @@ def strategy(history, memory):
 		else:
 			choice = "cooperate"
 	
-	print(memory)		
 	return choice, memory
