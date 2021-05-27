@@ -86,19 +86,20 @@ def strategy(history, memory):
         if not ( oppMoves[0:6] == [0,1,0,1,0,1] or oppMoves[0:6] == [1,0,1,0,1,0] ):
             choice = "cooperate"
         
-    # simple de-bouncer
-    if turn > 6 and ourMoves[0:6] == [1,0,1,0,1,0] and oppMoves[0:6] == [0,1,0,1,0,1]:
-        choice = "defect"
-        
     # ftft detection
     if len(opponentMoves) > 4:
     	if opponentMoves[2] == 1 and opponentMoves[3] == 0:
     		our_last_move = historyNonList[0, -1] if num_rounds > 0 else 1
     		choice = 0 if our_last_move else 1
+    		memory = "ftft"
 			
     # joss detector
     # yeah theres no joss detector. whoops
     if historyNonList.shape[1] > 8 and DetectJoss(historyNonList, 8):
     	choice = "cooperate"
+    
+    # stop deadlock	
+    if turn > 6 and ourMoves[0:6] == [1,0,1,0,1,0] and oppMoves[0:6] == [0,1,0,1,0,1] and memory != "ftft":
+        choice = "defect"
     
     return choice, memory
