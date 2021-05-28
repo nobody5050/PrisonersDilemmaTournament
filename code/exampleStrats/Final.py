@@ -84,11 +84,11 @@ def strategy(history, memory):
 			else:
 				choice = "defect"
 		elif memory == "tft":
-			#do tft
-			choice = "cooperate"
-			if history.shape[1] >= 1 and history[1,-1] == 0: 
-				# Choose to defect if and only if the opponent just defected.
-				choice = "defect"
+			choice = 1
+			if history.shape[1] != 0:
+				percents = np.mean(history, axis=1)
+			if percents[0] > percents[1] + 0.1:
+				choice = 0
 		elif memory == "alternate":
 			#alternate
 			our_last_move = history[0, -1] if num_rounds > 0 else 1
